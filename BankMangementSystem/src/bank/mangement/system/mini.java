@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 public class mini extends JFrame implements ActionListener {
-    String pin;
+    String pin,cardno,forno;
     JButton button;
     mini(String pin){
         this.pin = pin;
@@ -30,6 +30,10 @@ public class mini extends JFrame implements ActionListener {
         label3.setBounds(20,80,300,20);
         add(label3);
 
+        JLabel label5= new JLabel();
+        label5.setBounds(20,100,300,20);
+        add(label5);
+
         JLabel label4 = new JLabel();
         label4.setBounds(20,400,300,20);
         add(label4);
@@ -38,7 +42,21 @@ public class mini extends JFrame implements ActionListener {
             Connn c = new Connn();
             ResultSet resultSet = c.statement.executeQuery("select * from login where Pin = '"+pin+"'");
             while (resultSet.next()){
+                cardno=resultSet.getString("Card_no");
                 label3.setText("Card Number:  "+ resultSet.getString("Card_no").substring(0,4) + "XXXXXXXX"+ resultSet.getString("Card_no").substring(12));
+            }
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
+        try{
+            Connn c = new Connn();
+            ResultSet resultSet = c.statement.executeQuery("select  Form_no from signupthree where card_no = '"+cardno+"'");
+            while (resultSet.next()){
+                forno=resultSet.getString("Form_no");
+            }
+            ResultSet res = c.statement.executeQuery("select  name from signup where form_no = '"+forno+"'");
+            while (res.next()){
+                label5.setText("COUSTUMER NAME:  "+ res.getString("name"));
             }
         }catch (Exception e ){
             e.printStackTrace();
@@ -82,5 +100,3 @@ public class mini extends JFrame implements ActionListener {
         new mini("");
     }
 }
-
-
