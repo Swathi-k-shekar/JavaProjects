@@ -4,10 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
 public class main_Class extends JFrame implements ActionListener {
     JButton b1,b2,b3,b4,b5,b6,b7;
-    String pin;
+    String pin,forno,cardno;
     main_Class(String pin){
         this.pin = pin;
 
@@ -18,11 +19,41 @@ public class main_Class extends JFrame implements ActionListener {
         l3.setBounds(0,0,1550,830);
         add(l3);
 
+
         JLabel label = new JLabel("Please Select Your Transaction");
-        label.setBounds(430,180,700,35);
+        label.setBounds(430,200,700,35);
         label.setForeground(Color.WHITE);
         label.setFont(new Font("System",Font.BOLD,28));
         l3.add(label);
+
+        JLabel label3 = new JLabel("Please Select Your Transaction");
+        label3.setBounds(430,160,700,35);
+        label3.setForeground(Color.pink);
+        label3.setFont(new Font("System",Font.BOLD,28));
+        l3.add(label3);
+
+        try{
+            Connn c = new Connn();
+            ResultSet resultSet = c.statement.executeQuery("select * from login where Pin = '"+pin+"'");
+            while (resultSet.next()){
+                cardno=resultSet.getString("Card_no");
+            }
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
+        try{
+            Connn c = new Connn();
+            ResultSet resultSet = c.statement.executeQuery("select  Form_no from signupthree where card_no = '"+cardno+"'");
+            while (resultSet.next()){
+                forno=resultSet.getString("Form_no");
+            }
+            ResultSet res = c.statement.executeQuery("select  name from signup where form_no = '"+forno+"'");
+            while (res.next()){
+                label3.setText(" HAI  "+ res.getString("name")+"  Welcome  ");
+            }
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
 
         b1 = new JButton("DEPOSIT");
         b1.setForeground(Color.WHITE);
